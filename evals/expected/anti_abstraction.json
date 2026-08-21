@@ -1,0 +1,274 @@
+{
+  "candidates": [
+    {
+      "candidate_id": "exact_file:716c7aee84a4419a",
+      "claim": "Files have byte-identical content.",
+      "claim_ceiling": "lexical-similarity",
+      "details": {
+        "byte_size": 25,
+        "content_sha256": "07a6fb4d496ce610c7336d0a367ee9034e8471b26efb744c4766b8de153e84e7",
+        "distinct_file_count": 2,
+        "occurrence_count": 2
+      },
+      "fingerprint": "sha256:b363e5eda435cc959bd5be1ee7ae282e287d5e5c828bea9e608828015eb8a421",
+      "kind": "exact_file",
+      "occurrences": [
+        {
+          "byte_size": 25,
+          "path": "platform/android/NOTICE.txt"
+        },
+        {
+          "byte_size": 25,
+          "path": "platform/ios/NOTICE.txt"
+        }
+      ]
+    },
+    {
+      "candidate_id": "repeated_literal:ce14eb3227e6b8d2",
+      "claim": "Artifacts contain the same normalized literal.",
+      "claim_ceiling": "lexical-similarity",
+      "details": {
+        "character_count": 67,
+        "comment_only": false,
+        "distinct_file_count": 2,
+        "normalization": "Unicode NFKC and collapsed whitespace; the value is a regex-delimited fragment and may not be the complete source literal",
+        "normalized_literal": "Record unavailable. Contact the responsible team before continuing.",
+        "occurrence_count": 2,
+        "shape_class": "prose-or-other",
+        "truncation_risk": false,
+        "verbatim_at_source": true
+      },
+      "fingerprint": "sha256:974b7b4eb735a891ab1d064d2400bae3765493ebed18f40553e2767d1bca75cb",
+      "kind": "repeated_literal",
+      "occurrences": [
+        {
+          "line": 1,
+          "line_is_comment": false,
+          "path": "domains/billing.py"
+        },
+        {
+          "line": 1,
+          "line_is_comment": false,
+          "path": "domains/clinical.py"
+        }
+      ]
+    },
+    {
+      "candidate_id": "font_family:2384791e2bb27539",
+      "claim": "Artifacts declare the same normalized font-family value.",
+      "claim_ceiling": "lexical-similarity",
+      "details": {
+        "distinct_file_count": 2,
+        "normalization": "case-folded, quote-free comma-separated family list",
+        "normalized_font_family": "-apple-system,blinkmacsystemfont,sans-serif",
+        "occurrence_count": 2
+      },
+      "fingerprint": "sha256:90a93dba7ac872c798493131719a6563342fa95bbd3091545f030c88ac62cde3",
+      "kind": "font_family",
+      "occurrences": [
+        {
+          "line": 2,
+          "path": "styles/admin.css"
+        },
+        {
+          "line": 2,
+          "path": "styles/patient.css"
+        }
+      ]
+    },
+    {
+      "candidate_id": "normalized_text_block:64d6d916b0c0d6fd",
+      "claim": "Documents contain the same whitespace- and case-normalized text block.",
+      "claim_ceiling": "lexical-similarity",
+      "details": {
+        "character_count": 95,
+        "distinct_file_count": 2,
+        "normalization": "Unicode NFKC, case-folded, collapsed whitespace",
+        "normalized_text": "this notice describes a local fallback. it does not define shared domain behavior or ownership.",
+        "occurrence_count": 2
+      },
+      "fingerprint": "sha256:a429942ed4d437d501bb50925fb40c7147c65492385d27a1fca3ff77bf3e2a00",
+      "kind": "normalized_text_block",
+      "occurrences": [
+        {
+          "line": 3,
+          "path": "policies/billing.md"
+        },
+        {
+          "line": 3,
+          "path": "policies/clinical.md"
+        }
+      ]
+    },
+    {
+      "candidate_id": "json_key_shape:be8f374ad0a25777",
+      "claim": "JSON objects have the same recursive key-and-value-type shape.",
+      "claim_ceiling": "structural-similarity",
+      "details": {
+        "basename_set": [
+          "billing.json",
+          "clinical.json"
+        ],
+        "basename_uniform": false,
+        "distinct_file_count": 2,
+        "normalization": "sorted keys with recursive JSON value types",
+        "occurrence_count": 2,
+        "shape": {
+          "properties": {
+            "queue": {
+              "type": "string"
+            },
+            "team": {
+              "type": "string"
+            }
+          },
+          "type": "object"
+        },
+        "subsumed_by": "json_key_shape:39c30d3b17d0df67",
+        "subsumes": []
+      },
+      "fingerprint": "sha256:22bf3c2552072b5e2d820db7cbffbffc22df35efc1e8ca056630f152e6a75b11",
+      "kind": "json_key_shape",
+      "occurrences": [
+        {
+          "json_pointer": "/owner",
+          "path": "contracts/billing.json"
+        },
+        {
+          "json_pointer": "/owner",
+          "path": "contracts/clinical.json"
+        }
+      ]
+    },
+    {
+      "candidate_id": "json_key_shape:39c30d3b17d0df67",
+      "claim": "JSON objects have the same recursive key-and-value-type shape.",
+      "claim_ceiling": "structural-similarity",
+      "details": {
+        "basename_set": [
+          "billing.json",
+          "clinical.json"
+        ],
+        "basename_uniform": false,
+        "distinct_file_count": 2,
+        "normalization": "sorted keys with recursive JSON value types",
+        "occurrence_count": 2,
+        "shape": {
+          "properties": {
+            "owner": {
+              "properties": {
+                "queue": {
+                  "type": "string"
+                },
+                "team": {
+                  "type": "string"
+                }
+              },
+              "type": "object"
+            },
+            "reason": {
+              "type": "string"
+            },
+            "status": {
+              "type": "string"
+            }
+          },
+          "type": "object"
+        },
+        "subsumed_by": null,
+        "subsumes": [
+          "json_key_shape:be8f374ad0a25777"
+        ]
+      },
+      "fingerprint": "sha256:baaf21483549e38f080115defc8f2b9dd407ff0d2932c21bc79fcc2ade09712a",
+      "kind": "json_key_shape",
+      "occurrences": [
+        {
+          "json_pointer": "/",
+          "path": "contracts/billing.json"
+        },
+        {
+          "json_pointer": "/",
+          "path": "contracts/clinical.json"
+        }
+      ]
+    }
+  ],
+  "notice": "Candidate evidence only. Similarity does not establish a shared abstraction or a safe refactor.",
+  "scan": {
+    "artifact_count": 10,
+    "ignored_directory_names": [
+      ".cache",
+      ".git",
+      ".gradle",
+      ".hg",
+      ".idea",
+      ".mypy_cache",
+      ".next",
+      ".nuxt",
+      ".parcel-cache",
+      ".pytest_cache",
+      ".ruff_cache",
+      ".svelte-kit",
+      ".svn",
+      ".terraform",
+      ".tox",
+      ".turbo",
+      ".venv",
+      ".yarn",
+      "__pycache__",
+      "build",
+      "carthage",
+      "coverage",
+      "deriveddata",
+      "dist",
+      "env",
+      "generated",
+      "node_modules",
+      "out",
+      "pods",
+      "target",
+      "third-party",
+      "third_party",
+      "vendor",
+      "vendors",
+      "venv",
+      "xcuserdata"
+    ],
+    "json_parse_errors": [],
+    "min_clone_tokens": 80,
+    "min_literal_length": 16,
+    "min_text_block_chars": 40,
+    "pruned_worktrees": [],
+    "requested_exclusions": {
+      "items": [],
+      "mode": "none"
+    },
+    "root": "anti_abstraction",
+    "roots": [
+      {
+        "artifact_count": 10,
+        "index": 0,
+        "label": "anti_abstraction"
+      }
+    ],
+    "scanner": {
+      "sha256": "3aebd30d8dfb58af2f6bd8af87297f9614e1a7f8a0951b06d86928a58e3edd9c",
+      "version": "1.2.0"
+    },
+    "skipped_symlinks": [],
+    "text_artifact_count": 10
+  },
+  "schema_version": "1.2",
+  "summary": {
+    "candidate_count": 6,
+    "candidate_count_by_kind": {
+      "exact_file": 1,
+      "font_family": 1,
+      "json_key_shape": 2,
+      "normalized_text_block": 1,
+      "repeated_literal": 1,
+      "token_block_clone": 0
+    }
+  }
+}

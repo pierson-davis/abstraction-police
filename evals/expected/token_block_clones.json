@@ -1,0 +1,110 @@
+{
+  "candidates": [
+    {
+      "candidate_id": "token_block_clone:6899742d205afc6f",
+      "claim": "Artifacts contain a contiguous run of identically shaped normalized tokens (identifiers, string values, and numbers erased).",
+      "claim_ceiling": "lexical-similarity",
+      "details": {
+        "distinct_file_count": 2,
+        "member_count": 2,
+        "min_clone_tokens": 80,
+        "normalization": "identifiers -> ID, string literals -> STR, numeric literals -> NUM, punctuation kept verbatim, comments stripped",
+        "occurrence_count": 2,
+        "token_count": 148
+      },
+      "fingerprint": "sha256:18a7bff7db72fad85cc26ac686c404fb53540068a31c91f879409c7ac7f815b8",
+      "kind": "token_block_clone",
+      "occurrences": [
+        {
+          "end_line": 20,
+          "path": "export/invoices.py",
+          "start_line": 1,
+          "token_count": 148
+        },
+        {
+          "end_line": 20,
+          "path": "ingest/orders.py",
+          "start_line": 1,
+          "token_count": 148
+        }
+      ]
+    }
+  ],
+  "notice": "Candidate evidence only. Similarity does not establish a shared abstraction or a safe refactor.",
+  "scan": {
+    "artifact_count": 3,
+    "ignored_directory_names": [
+      ".cache",
+      ".git",
+      ".gradle",
+      ".hg",
+      ".idea",
+      ".mypy_cache",
+      ".next",
+      ".nuxt",
+      ".parcel-cache",
+      ".pytest_cache",
+      ".ruff_cache",
+      ".svelte-kit",
+      ".svn",
+      ".terraform",
+      ".tox",
+      ".turbo",
+      ".venv",
+      ".yarn",
+      "__pycache__",
+      "build",
+      "carthage",
+      "coverage",
+      "deriveddata",
+      "dist",
+      "env",
+      "generated",
+      "node_modules",
+      "out",
+      "pods",
+      "target",
+      "third-party",
+      "third_party",
+      "vendor",
+      "vendors",
+      "venv",
+      "xcuserdata"
+    ],
+    "json_parse_errors": [],
+    "min_clone_tokens": 80,
+    "min_literal_length": 16,
+    "min_text_block_chars": 40,
+    "pruned_worktrees": [],
+    "requested_exclusions": {
+      "items": [],
+      "mode": "none"
+    },
+    "root": "token_block_clones",
+    "roots": [
+      {
+        "artifact_count": 3,
+        "index": 0,
+        "label": "token_block_clones"
+      }
+    ],
+    "scanner": {
+      "sha256": "3aebd30d8dfb58af2f6bd8af87297f9614e1a7f8a0951b06d86928a58e3edd9c",
+      "version": "1.2.0"
+    },
+    "skipped_symlinks": [],
+    "text_artifact_count": 3
+  },
+  "schema_version": "1.2",
+  "summary": {
+    "candidate_count": 1,
+    "candidate_count_by_kind": {
+      "exact_file": 0,
+      "font_family": 0,
+      "json_key_shape": 0,
+      "normalized_text_block": 0,
+      "repeated_literal": 0,
+      "token_block_clone": 1
+    }
+  }
+}

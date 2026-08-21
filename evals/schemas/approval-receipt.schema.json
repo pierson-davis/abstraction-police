@@ -1,0 +1,115 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://local.invalid/abstraction-police/approval-receipt.schema.json",
+  "title": "Explicit promotion approval receipt",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schema_version",
+    "approval_kind",
+    "approval_id",
+    "approved",
+    "candidate_identity",
+    "candidate_skill_hash",
+    "base_receipt_id",
+    "candidate_receipt_id",
+    "grader_id",
+    "eval_manifest_hash",
+    "model_comparison_key",
+    "model_policy_hash",
+    "public_result_hash",
+    "holdout_result_hash",
+    "public_suite_identity",
+    "external_suite_identity",
+    "approver_id",
+    "approved_at",
+    "approval_statement",
+    "model_change_approved",
+    "scanner_change_approved",
+    "manifest_change_approved"
+  ],
+  "properties": {
+    "schema_version": {
+      "const": "1.0"
+    },
+    "approval_kind": {
+      "const": "explicit-human"
+    },
+    "approval_id": {
+      "type": "string",
+      "pattern": "^approval-sha256:[0-9a-f]{64}$"
+    },
+    "approved": {
+      "const": true
+    },
+    "candidate_identity": {
+      "type": "string",
+      "pattern": "^skill-sha256:[0-9a-f]{64}$"
+    },
+    "candidate_skill_hash": {
+      "type": "string",
+      "pattern": "^[0-9a-f]{64}$"
+    },
+    "base_receipt_id": {
+      "type": "string",
+      "pattern": "^run-sha256:[0-9a-f]{64}$"
+    },
+    "candidate_receipt_id": {
+      "type": "string",
+      "pattern": "^run-sha256:[0-9a-f]{64}$"
+    },
+    "grader_id": {
+      "type": "string",
+      "minLength": 1
+    },
+    "eval_manifest_hash": {
+      "type": "string",
+      "pattern": "^[0-9a-f]{64}$"
+    },
+    "model_comparison_key": {
+      "type": "string",
+      "pattern": "^model-comparison-sha256:[0-9a-f]{64}$"
+    },
+    "model_policy_hash": {
+      "type": "string",
+      "pattern": "^[0-9a-f]{64}$"
+    },
+    "public_result_hash": {
+      "type": "string",
+      "pattern": "^[0-9a-f]{64}$"
+    },
+    "holdout_result_hash": {
+      "type": "string",
+      "pattern": "^[0-9a-f]{64}$"
+    },
+    "public_suite_identity": {
+      "type": "string",
+      "pattern": "^[0-9a-f]{64}$"
+    },
+    "external_suite_identity": {
+      "type": "string",
+      "pattern": "^[0-9a-f]{64}$"
+    },
+    "approver_id": {
+      "type": "string",
+      "minLength": 1
+    },
+    "approved_at": {
+      "type": "string",
+      "format": "date-time"
+    },
+    "approval_statement": {
+      "type": "string",
+      "minLength": 1
+    },
+    "model_change_approved": {
+      "type": "boolean"
+    },
+    "scanner_change_approved": {
+      "type": "boolean"
+    },
+    "manifest_change_approved": {
+      "type": "boolean"
+    }
+  }
+}

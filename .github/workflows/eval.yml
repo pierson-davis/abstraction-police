@@ -1,0 +1,58 @@
+name: eval
+
+on:
+  push:
+  pull_request:
+
+jobs:
+  frozen-suite:
+    name: frozen suite (${{ matrix.os }}, py${{ matrix.python }})
+    strategy:
+      fail-fast: false
+      matrix:
+        include:
+          - os: ubuntu-latest
+            python: "3.9"
+          - os: ubuntu-latest
+            python: "3.12"
+          - os: macos-latest
+            python: "3.12"
+    runs-on: ${{ matrix.os }}
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: ${{ matrix.python }}
+      - name: Compile every script
+        run: python -m compileall -q scripts evals/governance-cases
+      - name: Run the frozen suite twice and require byte-identical results
+        run: |
+          # Results go outside the tree: run_eval hashes the whole skill tree as the subject.
+          python -B scripts/run_eval.py > "$RUNNER_TEMP/result-1.json"
+          python -B scripts/run_eval.py > "$RUNNER_TEMP/result-2.json"
+          cmp "$RUNNER_TEMP/result-1.json" "$RUNNER_TEMP/result-2.json"
+          python - <<'PY'
+          import json, os
+          r = json.load(open(os.path.join(os.environ["RUNNER_TEMP"], "result-1.json")))
+          assert r["status"] == "passed", r
+          print("identity", r["identity"]["sha256"], "subject", r["subject"]["sha256"])
+          PY
+      - uses: actions/upload-artifact@v4
+        with:
+          name: result-${{ matrix.os }}-py${{ matrix.python }}
+          path: ${{ runner.temp }}/result-1.json
+
+  cross-platform-identity:
+    name: results identical across OS and Python
+    needs: frozen-suite
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/download-artifact@v4
+        with:
+          path: results
+      - name: Every result file must be byte-identical
+        run: |
+          ls -R results
+          first=$(ls results/*/result-1.json | head -n 1)
+          for f in results/*/result-1.json; do cmp "$first" "$f"; done
+          echo "all results byte-identical"

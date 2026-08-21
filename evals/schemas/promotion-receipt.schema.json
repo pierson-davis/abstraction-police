@@ -1,0 +1,97 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://local.invalid/abstraction-police/promotion-receipt.schema.json",
+  "title": "Immutable promotion gate receipt",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schema_version",
+    "kind",
+    "receipt_id",
+    "base_receipt_id",
+    "candidate_receipt_id",
+    "candidate_identity",
+    "candidate_subject_sha256",
+    "grader_id",
+    "approval_id",
+    "public_result_hash",
+    "holdout_result_hash",
+    "public_suite_identity",
+    "external_suite_identity",
+    "checks",
+    "eligible"
+  ],
+  "properties": {
+    "schema_version": {
+      "const": "1.0"
+    },
+    "kind": {
+      "const": "promotion-gate-receipt"
+    },
+    "receipt_id": {
+      "type": "string",
+      "pattern": "^promotion-sha256:[0-9a-f]{64}$"
+    },
+    "base_receipt_id": {
+      "type": "string"
+    },
+    "candidate_receipt_id": {
+      "type": "string"
+    },
+    "candidate_identity": {
+      "type": "string"
+    },
+    "candidate_subject_sha256": {
+      "type": "string",
+      "pattern": "^[0-9a-f]{64}$"
+    },
+    "grader_id": {
+      "type": "string"
+    },
+    "approval_id": {
+      "type": "string"
+    },
+    "public_result_hash": {
+      "type": "string",
+      "pattern": "^[0-9a-f]{64}$"
+    },
+    "holdout_result_hash": {
+      "type": "string",
+      "pattern": "^[0-9a-f]{64}$"
+    },
+    "public_suite_identity": {
+      "type": "string",
+      "pattern": "^[0-9a-f]{64}$"
+    },
+    "external_suite_identity": {
+      "type": "string",
+      "pattern": "^[0-9a-f]{64}$"
+    },
+    "checks": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": [
+          "name",
+          "passed",
+          "detail"
+        ],
+        "properties": {
+          "name": {
+            "type": "string"
+          },
+          "passed": {
+            "type": "boolean"
+          },
+          "detail": {
+            "type": "string"
+          }
+        }
+      }
+    },
+    "eligible": {
+      "type": "boolean"
+    }
+  }
+}

@@ -1,0 +1,113 @@
+{
+  "candidates": [
+    {
+      "candidate_id": "repeated_literal:d148acd716496f4b",
+      "claim": "Artifacts contain the same normalized literal.",
+      "claim_ceiling": "lexical-similarity",
+      "details": {
+        "character_count": 35,
+        "comment_only": false,
+        "distinct_file_count": 2,
+        "normalization": "Unicode NFKC and collapsed whitespace; the value is a regex-delimited fragment and may not be the complete source literal",
+        "normalized_literal": "Too many requests, slow down please",
+        "occurrence_count": 2,
+        "shape_class": "prose-or-other",
+        "truncation_risk": false,
+        "verbatim_at_source": true
+      },
+      "fingerprint": "sha256:66357a4889fe1d960b418cf07d58d54d9ea2687fb20bb545fd38aaa44e10862c",
+      "kind": "repeated_literal",
+      "occurrences": [
+        {
+          "line": 1,
+          "line_is_comment": false,
+          "path": "src/limiter.ts"
+        },
+        {
+          "line": 1,
+          "line_is_comment": false,
+          "path": "src/other.ts"
+        }
+      ]
+    }
+  ],
+  "notice": "Candidate evidence only. Similarity does not establish a shared abstraction or a safe refactor.",
+  "scan": {
+    "artifact_count": 2,
+    "ignored_directory_names": [
+      ".cache",
+      ".git",
+      ".gradle",
+      ".hg",
+      ".idea",
+      ".mypy_cache",
+      ".next",
+      ".nuxt",
+      ".parcel-cache",
+      ".pytest_cache",
+      ".ruff_cache",
+      ".svelte-kit",
+      ".svn",
+      ".terraform",
+      ".tox",
+      ".turbo",
+      ".venv",
+      ".yarn",
+      "__pycache__",
+      "build",
+      "carthage",
+      "coverage",
+      "deriveddata",
+      "dist",
+      "env",
+      "generated",
+      "node_modules",
+      "out",
+      "pods",
+      "target",
+      "third-party",
+      "third_party",
+      "vendor",
+      "vendors",
+      "venv",
+      "xcuserdata"
+    ],
+    "json_parse_errors": [],
+    "min_clone_tokens": 80,
+    "min_literal_length": 16,
+    "min_text_block_chars": 40,
+    "pruned_worktrees": [
+      ".worktrees/copy1"
+    ],
+    "requested_exclusions": {
+      "items": [],
+      "mode": "none"
+    },
+    "root": "duplicate_subtree",
+    "roots": [
+      {
+        "artifact_count": 2,
+        "index": 0,
+        "label": "duplicate_subtree"
+      }
+    ],
+    "scanner": {
+      "sha256": "3aebd30d8dfb58af2f6bd8af87297f9614e1a7f8a0951b06d86928a58e3edd9c",
+      "version": "1.2.0"
+    },
+    "skipped_symlinks": [],
+    "text_artifact_count": 2
+  },
+  "schema_version": "1.2",
+  "summary": {
+    "candidate_count": 1,
+    "candidate_count_by_kind": {
+      "exact_file": 0,
+      "font_family": 0,
+      "json_key_shape": 0,
+      "normalized_text_block": 0,
+      "repeated_literal": 1,
+      "token_block_clone": 0
+    }
+  }
+}

@@ -1,0 +1,101 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://local.invalid/abstraction-police/improvement-request.schema.json",
+  "title": "Content-addressed candidate improvement request",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schema_version",
+    "kind",
+    "request_id",
+    "base_skill_identity",
+    "base_skill_hash",
+    "producer_id",
+    "model",
+    "inputs",
+    "proposed_candidate_identity",
+    "live_skill_modified"
+  ],
+  "properties": {
+    "schema_version": {
+      "const": "1.0"
+    },
+    "kind": {
+      "const": "improvement-request"
+    },
+    "request_id": {
+      "type": "string",
+      "pattern": "^request-sha256:[0-9a-f]{64}$"
+    },
+    "base_skill_identity": {
+      "type": "string",
+      "pattern": "^skill-sha256:[0-9a-f]{64}$"
+    },
+    "base_skill_hash": {
+      "type": "string",
+      "pattern": "^[0-9a-f]{64}$"
+    },
+    "producer_id": {
+      "type": "string",
+      "minLength": 1
+    },
+    "model": {
+      "type": "object"
+    },
+    "inputs": {
+      "type": "array",
+      "minItems": 1,
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": [
+          "kind",
+          "sha256",
+          "artifact_name"
+        ],
+        "properties": {
+          "kind": {
+            "enum": [
+              "findings",
+              "failures",
+              "user-dispositions",
+              "learning-receipt"
+            ]
+          },
+          "sha256": {
+            "type": "string",
+            "pattern": "^[0-9a-f]{64}$"
+          },
+          "artifact_name": {
+            "type": "string",
+            "pattern": "^input-(?:findings|failures|user-dispositions|learning-receipt)-[0-9a-f]{64}\\.json$"
+          }
+        }
+      }
+    },
+    "patch": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "artifact_name",
+        "sha256"
+      ],
+      "properties": {
+        "artifact_name": {
+          "type": "string"
+        },
+        "sha256": {
+          "type": "string",
+          "pattern": "^[0-9a-f]{64}$"
+        }
+      }
+    },
+    "proposed_candidate_identity": {
+      "type": "string",
+      "pattern": "^candidate-request-sha256:[0-9a-f]{64}$"
+    },
+    "live_skill_modified": {
+      "const": false
+    }
+  }
+}

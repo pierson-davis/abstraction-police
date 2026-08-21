@@ -1,0 +1,329 @@
+{
+  "candidates": [
+    {
+      "candidate_id": "exact_file:4c3858143667e69f",
+      "claim": "Files have byte-identical content.",
+      "claim_ceiling": "lexical-similarity",
+      "details": {
+        "byte_size": 62,
+        "content_sha256": "40893f8cd53e533b2e3b111ae6ff360211f1195b2523c6feb2269527f3312f4f",
+        "distinct_file_count": 2,
+        "occurrence_count": 2
+      },
+      "fingerprint": "sha256:df0b0ff3604c52826829aece71cd3d3095a6b9e2f01b62d4d0409212e652893f",
+      "kind": "exact_file",
+      "occurrences": [
+        {
+          "byte_size": 62,
+          "path": "assets/logo-a.svg"
+        },
+        {
+          "byte_size": 62,
+          "path": "assets/logo-b.svg"
+        }
+      ]
+    },
+    {
+      "candidate_id": "repeated_literal:9103dec3f540a7e0",
+      "claim": "Artifacts contain the same normalized literal.",
+      "claim_ceiling": "lexical-similarity",
+      "details": {
+        "character_count": 65,
+        "comment_only": false,
+        "distinct_file_count": 2,
+        "normalization": "Unicode NFKC and collapsed whitespace; the value is a regex-delimited fragment and may not be the complete source literal",
+        "normalized_literal": "No matching records were found. Refine the filters and try again.",
+        "occurrence_count": 2,
+        "shape_class": "prose-or-other",
+        "truncation_risk": false,
+        "verbatim_at_source": true
+      },
+      "fingerprint": "sha256:fe6d7762e811c16776e50e4c179c7cd15831a3f078a00efbe6961697ba529246",
+      "kind": "repeated_literal",
+      "occurrences": [
+        {
+          "line": 1,
+          "line_is_comment": false,
+          "path": "services/billing.py"
+        },
+        {
+          "line": 1,
+          "line_is_comment": false,
+          "path": "services/inventory.py"
+        }
+      ]
+    },
+    {
+      "candidate_id": "font_family:42c18b6189b20ddf",
+      "claim": "Artifacts declare the same normalized font-family value.",
+      "claim_ceiling": "lexical-similarity",
+      "details": {
+        "distinct_file_count": 2,
+        "normalization": "case-folded, quote-free comma-separated family list",
+        "normalized_font_family": "ibm plex sans,arial,sans-serif",
+        "occurrence_count": 2
+      },
+      "fingerprint": "sha256:a7d706d37c32ab881601d7abca28b9291bf97ce17b246b57b069e994cf404078",
+      "kind": "font_family",
+      "occurrences": [
+        {
+          "line": 2,
+          "path": "styles/card.css"
+        },
+        {
+          "line": 2,
+          "path": "styles/dialog.css"
+        }
+      ]
+    },
+    {
+      "candidate_id": "normalized_text_block:a76128e5855f60c7",
+      "claim": "Documents contain the same whitespace- and case-normalized text block.",
+      "claim_ceiling": "lexical-similarity",
+      "details": {
+        "character_count": 95,
+        "distinct_file_count": 2,
+        "normalization": "Unicode NFKC, case-folded, collapsed whitespace",
+        "normalized_text": "reusable request validation should reject unknown fields and preserve the original field order.",
+        "occurrence_count": 2
+      },
+      "fingerprint": "sha256:f2d6af4cde66801d3facc9a4160df0de2f633109028e718ce43ffbc18b962ec8",
+      "kind": "normalized_text_block",
+      "occurrences": [
+        {
+          "line": 3,
+          "path": "docs/operations.md"
+        },
+        {
+          "line": 3,
+          "path": "docs/setup.md"
+        }
+      ]
+    },
+    {
+      "candidate_id": "json_key_shape:839f5b1753861afe",
+      "claim": "JSON objects have the same recursive key-and-value-type shape.",
+      "claim_ceiling": "structural-similarity",
+      "details": {
+        "basename_set": [
+          "alpha.json",
+          "beta.json"
+        ],
+        "basename_uniform": false,
+        "distinct_file_count": 2,
+        "normalization": "sorted keys with recursive JSON value types",
+        "occurrence_count": 2,
+        "shape": {
+          "properties": {
+            "attempts": {
+              "type": "number"
+            },
+            "enabled": {
+              "type": "boolean"
+            }
+          },
+          "type": "object"
+        },
+        "subsumed_by": "json_key_shape:27859baad0b304a7",
+        "subsumes": []
+      },
+      "fingerprint": "sha256:22257f0b0100b053d4c1ad53fc72cd56c66e45b64f6faacd966f5fa00c6e5539",
+      "kind": "json_key_shape",
+      "occurrences": [
+        {
+          "json_pointer": "/service/retry",
+          "path": "configs/alpha.json"
+        },
+        {
+          "json_pointer": "/service/retry",
+          "path": "configs/beta.json"
+        }
+      ]
+    },
+    {
+      "candidate_id": "json_key_shape:bf90ce1190f32fda",
+      "claim": "JSON objects have the same recursive key-and-value-type shape.",
+      "claim_ceiling": "structural-similarity",
+      "details": {
+        "basename_set": [
+          "alpha.json",
+          "beta.json"
+        ],
+        "basename_uniform": false,
+        "distinct_file_count": 2,
+        "normalization": "sorted keys with recursive JSON value types",
+        "occurrence_count": 2,
+        "shape": {
+          "properties": {
+            "region": {
+              "type": "string"
+            },
+            "service": {
+              "properties": {
+                "name": {
+                  "type": "string"
+                },
+                "retry": {
+                  "properties": {
+                    "attempts": {
+                      "type": "number"
+                    },
+                    "enabled": {
+                      "type": "boolean"
+                    }
+                  },
+                  "type": "object"
+                }
+              },
+              "type": "object"
+            }
+          },
+          "type": "object"
+        },
+        "subsumed_by": null,
+        "subsumes": [
+          "json_key_shape:27859baad0b304a7"
+        ]
+      },
+      "fingerprint": "sha256:27f77fc9dca210614953ab198dee70c7efd38fe510c2009ec61b3be682c96cda",
+      "kind": "json_key_shape",
+      "occurrences": [
+        {
+          "json_pointer": "/",
+          "path": "configs/alpha.json"
+        },
+        {
+          "json_pointer": "/",
+          "path": "configs/beta.json"
+        }
+      ]
+    },
+    {
+      "candidate_id": "json_key_shape:27859baad0b304a7",
+      "claim": "JSON objects have the same recursive key-and-value-type shape.",
+      "claim_ceiling": "structural-similarity",
+      "details": {
+        "basename_set": [
+          "alpha.json",
+          "beta.json"
+        ],
+        "basename_uniform": false,
+        "distinct_file_count": 2,
+        "normalization": "sorted keys with recursive JSON value types",
+        "occurrence_count": 2,
+        "shape": {
+          "properties": {
+            "name": {
+              "type": "string"
+            },
+            "retry": {
+              "properties": {
+                "attempts": {
+                  "type": "number"
+                },
+                "enabled": {
+                  "type": "boolean"
+                }
+              },
+              "type": "object"
+            }
+          },
+          "type": "object"
+        },
+        "subsumed_by": "json_key_shape:bf90ce1190f32fda",
+        "subsumes": [
+          "json_key_shape:839f5b1753861afe"
+        ]
+      },
+      "fingerprint": "sha256:da6544688c05e756f9258c0a9318e5b33e59effc5ac9a02971c317f156441383",
+      "kind": "json_key_shape",
+      "occurrences": [
+        {
+          "json_pointer": "/service",
+          "path": "configs/alpha.json"
+        },
+        {
+          "json_pointer": "/service",
+          "path": "configs/beta.json"
+        }
+      ]
+    }
+  ],
+  "notice": "Candidate evidence only. Similarity does not establish a shared abstraction or a safe refactor.",
+  "scan": {
+    "artifact_count": 10,
+    "ignored_directory_names": [
+      ".cache",
+      ".git",
+      ".gradle",
+      ".hg",
+      ".idea",
+      ".mypy_cache",
+      ".next",
+      ".nuxt",
+      ".parcel-cache",
+      ".pytest_cache",
+      ".ruff_cache",
+      ".svelte-kit",
+      ".svn",
+      ".terraform",
+      ".tox",
+      ".turbo",
+      ".venv",
+      ".yarn",
+      "__pycache__",
+      "build",
+      "carthage",
+      "coverage",
+      "deriveddata",
+      "dist",
+      "env",
+      "generated",
+      "node_modules",
+      "out",
+      "pods",
+      "target",
+      "third-party",
+      "third_party",
+      "vendor",
+      "vendors",
+      "venv",
+      "xcuserdata"
+    ],
+    "json_parse_errors": [],
+    "min_clone_tokens": 80,
+    "min_literal_length": 16,
+    "min_text_block_chars": 40,
+    "pruned_worktrees": [],
+    "requested_exclusions": {
+      "items": [],
+      "mode": "none"
+    },
+    "root": "shared_candidates",
+    "roots": [
+      {
+        "artifact_count": 10,
+        "index": 0,
+        "label": "shared_candidates"
+      }
+    ],
+    "scanner": {
+      "sha256": "3aebd30d8dfb58af2f6bd8af87297f9614e1a7f8a0951b06d86928a58e3edd9c",
+      "version": "1.2.0"
+    },
+    "skipped_symlinks": [],
+    "text_artifact_count": 10
+  },
+  "schema_version": "1.2",
+  "summary": {
+    "candidate_count": 7,
+    "candidate_count_by_kind": {
+      "exact_file": 1,
+      "font_family": 1,
+      "json_key_shape": 3,
+      "normalized_text_block": 1,
+      "repeated_literal": 1,
+      "token_block_clone": 0
+    }
+  }
+}

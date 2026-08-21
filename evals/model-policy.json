@@ -1,0 +1,43 @@
+{
+  "comparison_key_fields": [
+    "provider",
+    "model_id",
+    "model_revision",
+    "backend_fingerprint",
+    "reasoning_effort",
+    "temperature",
+    "seed",
+    "toolset_hash",
+    "system_prompt_hash",
+    "skill_hash",
+    "eval_manifest_hash",
+    "input_corpus_hash"
+  ],
+  "drift_policy": {
+    "alias_without_immutable_revision": "rejected",
+    "backend_fingerprint_unavailable": "rejected",
+    "changed_comparison_key": "new-baseline-required",
+    "missing_comparison_key": "inconclusive",
+    "same_key_nondeterministic_output": "record-all-samples-and-grade-independently",
+    "silent_baseline_update": "forbidden"
+  },
+  "identity_validation": {
+    "hash_fields": "lowercase-sha256",
+    "model_revision": "required-immutable-and-distinct-from-model-id",
+    "moving_aliases": "rejected",
+    "not_applicable_in_assisted_mode": "rejected",
+    "provider": "required-stable-identifier",
+    "seed": "integer",
+    "temperature": "finite-number",
+    "unknown_in_assisted_mode": "rejected"
+  },
+  "model_independent_authority": [
+    "byte_stability",
+    "canonical_json_validation",
+    "deterministic_candidate_generation",
+    "frozen_fixture_hash_validation",
+    "schema_validation"
+  ],
+  "promotion_rule": "Model-assisted output has promotion authority only when every comparison key is known and unchanged, or when a separately approved new baseline passes public and sealed holdout evaluation.",
+  "schema_version": "1.0"
+}

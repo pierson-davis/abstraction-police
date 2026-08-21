@@ -1,0 +1,4 @@
+interface:
+  display_name: "Abstraction Police"
+  short_description: "Find and govern latent reusable abstractions"
+  default_prompt: "Use $abstraction-police to run a read-only audit of this repository for duplicated or latently similar concepts, adjudicate each candidate with the SQUINT gates, and report dispositions with evidence. Do not modify the repository; write outputs to a separate directory."

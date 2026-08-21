@@ -1,0 +1,934 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://local.invalid/abstraction-police/findings.schema.json",
+  "title": "Abstraction Police findings",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schema_version",
+    "audit",
+    "execution",
+    "limitations",
+    "scope",
+    "summary",
+    "findings"
+  ],
+  "properties": {
+    "schema_version": {
+      "const": "1.0"
+    },
+    "scope": {
+      "type": "string",
+      "minLength": 1
+    },
+    "audit": {
+      "$ref": "#/$defs/audit"
+    },
+    "execution": {
+      "$ref": "#/$defs/execution"
+    },
+    "generated_by": {
+      "type": "string"
+    },
+    "limitations": {
+      "$ref": "#/$defs/explicit_list"
+    },
+    "summary": {
+      "$ref": "#/$defs/summary"
+    },
+    "findings": {
+      "type": "array",
+      "items": {
+        "$ref": "#/$defs/finding"
+      }
+    }
+  },
+  "$defs": {
+    "summary": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "triage"
+      ],
+      "properties": {
+        "triage": {
+          "$ref": "#/$defs/triage_ledger"
+        }
+      }
+    },
+    "triage_ledger": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "candidates_total",
+        "candidates_by_kind",
+        "dropped_by_class",
+        "investigated",
+        "promoted",
+        "not_reached"
+      ],
+      "properties": {
+        "candidates_total": {
+          "type": "integer",
+          "minimum": 0
+        },
+        "candidates_by_kind": {
+          "type": "object",
+          "additionalProperties": {
+            "type": "integer",
+            "minimum": 0
+          }
+        },
+        "dropped_by_class": {
+          "type": "object",
+          "additionalProperties": {
+            "type": "integer",
+            "minimum": 0
+          }
+        },
+        "investigated": {
+          "type": "integer",
+          "minimum": 0
+        },
+        "promoted": {
+          "type": "integer",
+          "minimum": 0
+        },
+        "not_reached": {
+          "type": "integer",
+          "minimum": 0
+        }
+      }
+    },
+    "explicit_list": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "mode",
+        "items"
+      ],
+      "properties": {
+        "mode": {
+          "enum": [
+            "none",
+            "specified"
+          ]
+        },
+        "items": {
+          "type": "array",
+          "uniqueItems": true,
+          "items": {
+            "type": "string",
+            "minLength": 1
+          }
+        }
+      },
+      "allOf": [
+        {
+          "if": {
+            "properties": {
+              "mode": {
+                "const": "none"
+              }
+            },
+            "required": [
+              "mode"
+            ]
+          },
+          "then": {
+            "properties": {
+              "items": {
+                "maxItems": 0
+              }
+            }
+          },
+          "else": {
+            "properties": {
+              "items": {
+                "minItems": 1
+              }
+            }
+          }
+        }
+      ]
+    },
+    "execution": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "output_directory",
+        "requested_exclusions",
+        "scanner",
+        "commands"
+      ],
+      "properties": {
+        "output_directory": {
+          "type": "string",
+          "minLength": 1
+        },
+        "requested_exclusions": {
+          "$ref": "#/$defs/explicit_list"
+        },
+        "scanner": {
+          "$ref": "#/$defs/scanner_execution"
+        },
+        "commands": {
+          "type": "array",
+          "minItems": 1,
+          "items": {
+            "type": "string",
+            "minLength": 1
+          }
+        },
+        "scan_roots": {
+          "type": "array",
+          "minItems": 1,
+          "items": {
+            "type": "string",
+            "minLength": 1
+          }
+        }
+      }
+    },
+    "scanner_execution": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "version",
+        "sha256",
+        "options",
+        "stderr"
+      ],
+      "properties": {
+        "version": {
+          "type": "string",
+          "minLength": 1
+        },
+        "sha256": {
+          "type": "string",
+          "pattern": "^[0-9a-f]{64}$"
+        },
+        "options": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        },
+        "stderr": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": [
+            "status",
+            "content"
+          ],
+          "properties": {
+            "status": {
+              "enum": [
+                "empty",
+                "captured"
+              ]
+            },
+            "content": {
+              "type": "string"
+            }
+          }
+        }
+      }
+    },
+    "evidence_provenance": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "kind",
+        "producer",
+        "method"
+      ],
+      "properties": {
+        "kind": {
+          "enum": [
+            "deterministic-tool",
+            "direct-inspection",
+            "repository-history",
+            "runtime-observation",
+            "external-primary-source",
+            "human-confirmation"
+          ]
+        },
+        "producer": {
+          "type": "string",
+          "minLength": 1
+        },
+        "method": {
+          "type": "string",
+          "minLength": 1
+        }
+      }
+    },
+    "authority_rule": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "kind",
+        "authority_basis",
+        "rule"
+      ],
+      "properties": {
+        "kind": {
+          "enum": [
+            "authoritative-derivation",
+            "explicit-parity-invariant",
+            "shared-requirement"
+          ]
+        },
+        "authority_basis": {
+          "enum": [
+            "declared-source-of-truth",
+            "normative-specification",
+            "executable-generation-rule",
+            "contractual-invariant"
+          ]
+        },
+        "rule": {
+          "type": "string",
+          "minLength": 1
+        }
+      }
+    },
+    "audit": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "root",
+        "revision",
+        "dirty_state",
+        "date",
+        "commands"
+      ],
+      "properties": {
+        "root": {
+          "type": "string",
+          "minLength": 1
+        },
+        "revision": {
+          "type": "string",
+          "minLength": 1
+        },
+        "dirty_state": {
+          "enum": [
+            "clean",
+            "dirty",
+            "unknown"
+          ]
+        },
+        "date": {
+          "type": "string",
+          "pattern": "^[0-9]{4}-[0-9]{2}-[0-9]{2}$"
+        },
+        "commands": {
+          "type": "array",
+          "minItems": 1,
+          "items": {
+            "type": "string"
+          }
+        }
+      }
+    },
+    "source": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "path"
+      ],
+      "properties": {
+        "path": {
+          "type": "string",
+          "minLength": 1
+        },
+        "start_line": {
+          "type": "integer",
+          "minimum": 1
+        },
+        "end_line": {
+          "type": "integer",
+          "minimum": 1
+        },
+        "sha256": {
+          "type": "string",
+          "pattern": "^[0-9a-f]{64}$"
+        },
+        "locator_kind": {
+          "enum": [
+            "line",
+            "json-pointer",
+            "yaml-path",
+            "toml-path",
+            "table-cell",
+            "page",
+            "frame",
+            "node",
+            "asset-id",
+            "symbol",
+            "other"
+          ]
+        },
+        "locator": {
+          "type": "string",
+          "minLength": 1
+        }
+      }
+    },
+    "metric": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "name",
+        "value"
+      ],
+      "properties": {
+        "name": {
+          "type": "string",
+          "minLength": 1
+        },
+        "value": {
+          "type": [
+            "number",
+            "integer",
+            "string",
+            "boolean"
+          ]
+        },
+        "unit": {
+          "type": "string"
+        }
+      }
+    },
+    "evidence": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "id",
+        "type",
+        "detail",
+        "sources",
+        "provenance",
+        "limitations"
+      ],
+      "properties": {
+        "id": {
+          "type": "string",
+          "pattern": "^E[1-9][0-9]*$"
+        },
+        "type": {
+          "enum": [
+            "inventory",
+            "exact-content-hash",
+            "normalized-text-similarity",
+            "token-similarity",
+            "literal-overlap",
+            "asset-exact-hash",
+            "asset-perceptual-similarity",
+            "ast-structural-similarity",
+            "control-flow-similarity",
+            "schema-shape-overlap",
+            "prompt-contract-overlap",
+            "config-key-overlap",
+            "workflow-step-overlap",
+            "test-setup-overlap",
+            "dependency-capability-overlap",
+            "existing-abstraction",
+            "git-cochange",
+            "call-graph",
+            "boundary-analysis",
+            "semantic-contract",
+            "differential-test",
+            "contract-test",
+            "runtime-trace",
+            "human-confirmation",
+            "authority-rule"
+          ]
+        },
+        "detail": {
+          "type": "string",
+          "minLength": 1
+        },
+        "sources": {
+          "type": "array",
+          "minItems": 1,
+          "items": {
+            "$ref": "#/$defs/source"
+          }
+        },
+        "provenance": {
+          "$ref": "#/$defs/evidence_provenance"
+        },
+        "limitations": {
+          "$ref": "#/$defs/explicit_list"
+        },
+        "authority_rule": {
+          "$ref": "#/$defs/authority_rule"
+        },
+        "metric": {
+          "$ref": "#/$defs/metric"
+        }
+      }
+    },
+    "finding": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "id",
+        "artifact_class",
+        "claim_level",
+        "claim",
+        "confidence",
+        "severity",
+        "locations",
+        "observations",
+        "evidence",
+        "meaningful_differences",
+        "boundary_constraints",
+        "squint",
+        "disposition",
+        "recommendation",
+        "maintenance_risk",
+        "change_risk",
+        "affected_consumers",
+        "owners",
+        "public_boundaries",
+        "verification_plan",
+        "rollback",
+        "missing_evidence",
+        "assumptions",
+        "exclusions"
+      ],
+      "properties": {
+        "id": {
+          "type": "string",
+          "pattern": "^[A-Za-z0-9][A-Za-z0-9._:-]*$"
+        },
+        "artifact_class": {
+          "enum": [
+            "code",
+            "ui-component",
+            "design-token",
+            "font",
+            "asset",
+            "configuration",
+            "schema",
+            "prompt",
+            "workflow",
+            "test",
+            "dependency",
+            "documentation",
+            "mixed"
+          ]
+        },
+        "claim_level": {
+          "enum": [
+            "inventory",
+            "lexical-similarity",
+            "structural-similarity",
+            "semantic-overlap",
+            "behavioral-equivalence"
+          ]
+        },
+        "claim": {
+          "type": "string",
+          "minLength": 1
+        },
+        "confidence": {
+          "enum": [
+            "confirmed",
+            "probable",
+            "speculative"
+          ]
+        },
+        "severity": {
+          "enum": [
+            "critical",
+            "high",
+            "medium",
+            "low",
+            "info"
+          ]
+        },
+        "locations": {
+          "type": "array",
+          "minItems": 1,
+          "items": {
+            "$ref": "#/$defs/source"
+          }
+        },
+        "evidence": {
+          "type": "array",
+          "minItems": 1,
+          "items": {
+            "$ref": "#/$defs/evidence"
+          }
+        },
+        "observations": {
+          "type": "array",
+          "minItems": 1,
+          "items": {
+            "$ref": "#/$defs/observation"
+          }
+        },
+        "meaningful_differences": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        },
+        "boundary_constraints": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        },
+        "disposition": {
+          "enum": [
+            "reuse-existing",
+            "extract",
+            "centralize",
+            "generate",
+            "parity",
+            "link-and-monitor",
+            "keep",
+            "needs-evidence"
+          ]
+        },
+        "action": {
+          "enum": [
+            "reuse-helper-or-component",
+            "extract-local-abstraction",
+            "centralize-source-of-truth",
+            "generate-from-schema",
+            "add-parity-test",
+            "parameterize-test",
+            "consolidate-dependency",
+            "link-contracts-or-assets",
+            "no-change",
+            "investigate"
+          ]
+        },
+        "recommendation": {
+          "type": "string",
+          "minLength": 1
+        },
+        "squint": {
+          "$ref": "#/$defs/squint"
+        },
+        "maintenance_risk": {
+          "$ref": "#/$defs/risk"
+        },
+        "change_risk": {
+          "$ref": "#/$defs/risk"
+        },
+        "affected_consumers": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        },
+        "owners": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        },
+        "public_boundaries": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        },
+        "verification_plan": {
+          "$ref": "#/$defs/verification_plan"
+        },
+        "rollback": {
+          "$ref": "#/$defs/rollback"
+        },
+        "missing_evidence": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        },
+        "assumptions": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        },
+        "exclusions": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        }
+      },
+      "allOf": [
+        {
+          "if": {
+            "properties": {
+              "disposition": {
+                "const": "needs-evidence"
+              }
+            },
+            "required": [
+              "disposition"
+            ]
+          },
+          "then": {
+            "properties": {
+              "missing_evidence": {
+                "minItems": 1
+              }
+            }
+          }
+        }
+      ]
+    },
+    "observation": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "detail",
+        "command",
+        "sources"
+      ],
+      "properties": {
+        "detail": {
+          "type": "string",
+          "minLength": 1
+        },
+        "command": {
+          "type": "string",
+          "minLength": 1
+        },
+        "sources": {
+          "type": "array",
+          "minItems": 1,
+          "items": {
+            "$ref": "#/$defs/source"
+          }
+        }
+      }
+    },
+    "squint_gate": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "status",
+        "rationale",
+        "evidence_refs"
+      ],
+      "properties": {
+        "status": {
+          "enum": [
+            "pass",
+            "fail",
+            "unknown"
+          ]
+        },
+        "rationale": {
+          "type": "string",
+          "minLength": 1
+        },
+        "evidence_refs": {
+          "type": "array",
+          "items": {
+            "type": "string",
+            "pattern": "^E[1-9][0-9]*$"
+          },
+          "uniqueItems": true
+        }
+      }
+    },
+    "squint": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "S",
+        "Q",
+        "U",
+        "I",
+        "N",
+        "T"
+      ],
+      "properties": {
+        "S": {
+          "$ref": "#/$defs/squint_gate"
+        },
+        "Q": {
+          "$ref": "#/$defs/squint_gate"
+        },
+        "U": {
+          "$ref": "#/$defs/squint_gate"
+        },
+        "I": {
+          "$ref": "#/$defs/squint_gate"
+        },
+        "N": {
+          "$ref": "#/$defs/squint_gate"
+        },
+        "T": {
+          "$ref": "#/$defs/squint_gate"
+        }
+      }
+    },
+    "risk": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "level",
+        "rationale"
+      ],
+      "properties": {
+        "level": {
+          "enum": [
+            "critical",
+            "high",
+            "medium",
+            "low",
+            "unknown"
+          ]
+        },
+        "rationale": {
+          "type": "string",
+          "minLength": 1
+        }
+      }
+    },
+    "verification_step": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "command",
+        "prerequisites",
+        "environment",
+        "fixtures",
+        "expected",
+        "failure_means"
+      ],
+      "properties": {
+        "command": {
+          "type": "string",
+          "minLength": 1
+        },
+        "prerequisites": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        },
+        "environment": {
+          "type": "string",
+          "minLength": 1
+        },
+        "fixtures": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        },
+        "expected": {
+          "type": "string",
+          "minLength": 1
+        },
+        "failure_means": {
+          "type": "string",
+          "minLength": 1
+        }
+      }
+    },
+    "verification_plan": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "steps",
+        "unrun_checks"
+      ],
+      "properties": {
+        "steps": {
+          "type": "array",
+          "minItems": 1,
+          "items": {
+            "$ref": "#/$defs/verification_step"
+          }
+        },
+        "unrun_checks": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        }
+      }
+    },
+    "rollback": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "boundary",
+        "trigger",
+        "steps"
+      ],
+      "properties": {
+        "boundary": {
+          "type": "string",
+          "minLength": 1
+        },
+        "trigger": {
+          "type": "string",
+          "minLength": 1
+        },
+        "steps": {
+          "type": "array",
+          "minItems": 1,
+          "items": {
+            "type": "string"
+          }
+        }
+      }
+    }
+  },
+  "x-claim-level-order": [
+    "inventory",
+    "lexical-similarity",
+    "structural-similarity",
+    "semantic-overlap",
+    "behavioral-equivalence"
+  ],
+  "x-evidence-claim-ceilings": {
+    "inventory": "inventory",
+    "exact-content-hash": "lexical-similarity",
+    "normalized-text-similarity": "lexical-similarity",
+    "token-similarity": "lexical-similarity",
+    "literal-overlap": "lexical-similarity",
+    "asset-exact-hash": "lexical-similarity",
+    "asset-perceptual-similarity": "lexical-similarity",
+    "ast-structural-similarity": "structural-similarity",
+    "control-flow-similarity": "structural-similarity",
+    "schema-shape-overlap": "structural-similarity",
+    "prompt-contract-overlap": "structural-similarity",
+    "config-key-overlap": "structural-similarity",
+    "workflow-step-overlap": "structural-similarity",
+    "test-setup-overlap": "structural-similarity",
+    "dependency-capability-overlap": "structural-similarity",
+    "existing-abstraction": "semantic-overlap",
+    "git-cochange": "semantic-overlap",
+    "call-graph": "semantic-overlap",
+    "boundary-analysis": "semantic-overlap",
+    "semantic-contract": "semantic-overlap",
+    "differential-test": "behavioral-equivalence",
+    "contract-test": "behavioral-equivalence",
+    "runtime-trace": "behavioral-equivalence",
+    "human-confirmation": "semantic-overlap",
+    "authority-rule": "semantic-overlap"
+  },
+  "x-behavioral-evidence": [
+    "differential-test",
+    "contract-test",
+    "runtime-trace"
+  ]
+}

@@ -1,0 +1,252 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://local.invalid/abstraction-police/evaluation-result.schema.json",
+  "title": "Abstraction Police evaluation result",
+  "oneOf": [
+    {
+      "$ref": "#/$defs/public_result"
+    },
+    {
+      "$ref": "#/$defs/external_holdout_result"
+    }
+  ],
+  "$defs": {
+    "sha256": {
+      "type": "string",
+      "pattern": "^[0-9a-f]{64}$"
+    },
+    "public_result": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "schema_version",
+        "evaluation_scope",
+        "identity",
+        "subject",
+        "status",
+        "cases"
+      ],
+      "properties": {
+        "schema_version": {
+          "const": "1.0"
+        },
+        "evaluation_scope": {
+          "const": "public-regression"
+        },
+        "identity": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": [
+            "status",
+            "sha256",
+            "file_count"
+          ],
+          "properties": {
+            "status": {
+              "const": "passed"
+            },
+            "sha256": {
+              "$ref": "#/$defs/sha256"
+            },
+            "file_count": {
+              "type": "integer",
+              "minimum": 1
+            }
+          }
+        },
+        "subject": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": [
+            "status",
+            "sha256",
+            "file_count"
+          ],
+          "properties": {
+            "status": {
+              "const": "passed"
+            },
+            "sha256": {
+              "$ref": "#/$defs/sha256"
+            },
+            "file_count": {
+              "type": "integer",
+              "minimum": 1
+            }
+          }
+        },
+        "status": {
+          "enum": [
+            "passed",
+            "failed",
+            "error"
+          ]
+        },
+        "cases": {
+          "type": "array",
+          "minItems": 1,
+          "items": {
+            "type": "object",
+            "additionalProperties": false,
+            "required": [
+              "name",
+              "status",
+              "byte_identical",
+              "expected_match",
+              "stderr_empty"
+            ],
+            "properties": {
+              "name": {
+                "type": "string",
+                "minLength": 1
+              },
+              "status": {
+                "enum": [
+                  "passed",
+                  "failed",
+                  "error"
+                ]
+              },
+              "byte_identical": {
+                "type": "boolean"
+              },
+              "expected_match": {
+                "type": "boolean"
+              },
+              "stderr_empty": {
+                "type": "boolean"
+              }
+            }
+          }
+        }
+      }
+    },
+    "external_holdout_result": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "schema_version",
+        "suite",
+        "external_suite_identity",
+        "subject_sha256",
+        "eval_manifest_identity",
+        "model_intrinsic_key",
+        "input_corpus_hash",
+        "status",
+        "deterministic",
+        "tests_discovered",
+        "tests_passed",
+        "tests_failed",
+        "regressions",
+        "failures",
+        "case_ids",
+        "sealed",
+        "grader_owned",
+        "grader_id",
+        "candidate_access_ended"
+      ],
+      "properties": {
+        "schema_version": {
+          "const": "1.0"
+        },
+        "suite": {
+          "const": "holdout"
+        },
+        "external_suite_identity": {
+          "$ref": "#/$defs/sha256"
+        },
+        "subject_sha256": {
+          "$ref": "#/$defs/sha256"
+        },
+        "eval_manifest_identity": {
+          "$ref": "#/$defs/sha256"
+        },
+        "model_intrinsic_key": {
+          "anyOf": [
+            {
+              "const": "[not-applicable]"
+            },
+            {
+              "type": "string",
+              "pattern": "^model-intrinsic-sha256:[0-9a-f]{64}$"
+            }
+          ]
+        },
+        "input_corpus_hash": {
+          "$ref": "#/$defs/sha256"
+        },
+        "status": {
+          "enum": [
+            "passed",
+            "failed",
+            "error"
+          ]
+        },
+        "deterministic": {
+          "type": "boolean"
+        },
+        "tests_discovered": {
+          "type": "integer",
+          "minimum": 0
+        },
+        "tests_passed": {
+          "type": "integer",
+          "minimum": 0
+        },
+        "tests_failed": {
+          "type": "integer",
+          "minimum": 0
+        },
+        "regressions": {
+          "type": "integer",
+          "minimum": 0
+        },
+        "failures": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        },
+        "case_ids": {
+          "type": "array",
+          "items": {
+            "type": "string",
+            "minLength": 1
+          },
+          "uniqueItems": true
+        },
+        "sealed": {
+          "type": "boolean"
+        },
+        "grader_owned": {
+          "type": "boolean"
+        },
+        "grader_id": {
+          "type": "string",
+          "minLength": 1
+        },
+        "candidate_access_ended": {
+          "type": "boolean"
+        }
+      },
+      "allOf": [
+        {
+          "if": {
+            "properties": {
+              "status": {
+                "const": "passed"
+              }
+            }
+          },
+          "then": {
+            "properties": {
+              "failures": {
+                "maxItems": 0
+              }
+            }
+          }
+        }
+      ]
+    }
+  }
+}

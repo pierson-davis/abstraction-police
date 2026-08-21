@@ -1,0 +1,1 @@
+This generated output must never become a candidate.

@@ -1,0 +1,6 @@
+# Clinical fallback
+
+THIS NOTICE DESCRIBES A LOCAL FALLBACK. IT DOES NOT
+DEFINE SHARED DOMAIN BEHAVIOR OR OWNERSHIP.
+
+Clinical operations owns medical review.

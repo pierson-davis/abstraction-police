@@ -1,0 +1,10 @@
+{
+  "region": "west",
+  "service": {
+    "name": "beta",
+    "retry": {
+      "attempts": 5,
+      "enabled": false
+    }
+  }
+}

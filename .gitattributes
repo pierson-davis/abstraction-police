@@ -1,0 +1,3 @@
+# The frozen evaluator hashes every fixture and script byte-for-byte.
+# Normalize line endings so a checkout on any platform reproduces the identity.
+* text=auto eol=lf

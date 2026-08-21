@@ -1,0 +1,165 @@
+{
+  "artifact_classes": [
+    "asset",
+    "code",
+    "configuration",
+    "dependency",
+    "design-token",
+    "documentation",
+    "font",
+    "mixed",
+    "prompt",
+    "schema",
+    "test",
+    "ui-component",
+    "workflow"
+  ],
+  "claim_levels": [
+    "inventory",
+    "lexical-similarity",
+    "structural-similarity",
+    "semantic-overlap",
+    "behavioral-equivalence"
+  ],
+  "confidence_levels": [
+    "confirmed",
+    "probable",
+    "speculative"
+  ],
+  "dispositions": [
+    "reuse-existing",
+    "extract",
+    "centralize",
+    "generate",
+    "parity",
+    "link-and-monitor",
+    "keep",
+    "needs-evidence"
+  ],
+  "evidence_claim_ceilings": {
+    "asset-exact-hash": "lexical-similarity",
+    "asset-perceptual-similarity": "lexical-similarity",
+    "authority-rule": "semantic-overlap",
+    "ast-structural-similarity": "structural-similarity",
+    "boundary-analysis": "semantic-overlap",
+    "call-graph": "semantic-overlap",
+    "config-key-overlap": "structural-similarity",
+    "contract-test": "behavioral-equivalence",
+    "control-flow-similarity": "structural-similarity",
+    "dependency-capability-overlap": "structural-similarity",
+    "differential-test": "behavioral-equivalence",
+    "exact-content-hash": "lexical-similarity",
+    "existing-abstraction": "semantic-overlap",
+    "git-cochange": "semantic-overlap",
+    "human-confirmation": "semantic-overlap",
+    "inventory": "inventory",
+    "literal-overlap": "lexical-similarity",
+    "normalized-text-similarity": "lexical-similarity",
+    "prompt-contract-overlap": "structural-similarity",
+    "runtime-trace": "behavioral-equivalence",
+    "schema-shape-overlap": "structural-similarity",
+    "semantic-contract": "semantic-overlap",
+    "test-setup-overlap": "structural-similarity",
+    "token-similarity": "lexical-similarity",
+    "workflow-step-overlap": "structural-similarity"
+  },
+  "finding_contract": {
+    "cited_paths": "must-exist-under-audit-root",
+    "execution_provenance": "required",
+    "limitations": "explicit-none-or-specified",
+    "needs_evidence_missing_items": "nonempty-required",
+    "per_evidence_limitations": "required",
+    "typed_evidence_provenance": "required"
+  },
+  "authority_rules": {
+    "centralize": [
+      "authoritative-derivation",
+      "shared-requirement"
+    ],
+    "generate": [
+      "authoritative-derivation"
+    ],
+    "ownership_or_maintenance_alone": "insufficient",
+    "parity": [
+      "explicit-parity-invariant",
+      "shared-requirement"
+    ],
+    "u_pass_alone": "insufficient"
+  },
+  "audit_learning": {
+    "candidate_authority": false,
+    "record_for_outcomes": [
+      "completed",
+      "incomplete",
+      "failed",
+      "zero-finding"
+    ],
+    "request_triggers": [
+      "evaluation-failure",
+      "explicit-user-disposition"
+    ]
+  },
+  "promotion_gates": {
+    "active_skill_mutation_during_run": "forbidden",
+    "candidate_can_grade_itself": false,
+    "candidate_executable_evaluator_drift": "external-isolated-authenticated-review-required",
+    "changed_eval_requires_new_identity": true,
+    "changed_model_or_config_requires_new_baseline": true,
+    "deterministic_regression": "required",
+    "explicit_approval_receipt": "required",
+    "holdout_regression": "required",
+    "independent_grader": "required",
+    "local_gate_is_os_sandbox": false,
+    "local_rerun_executable_surface": "must-exactly-match-live-scripts-and-governance-cases",
+    "unknown_model_identity": "inconclusive"
+  },
+  "schema_version": "1.0",
+  "source_of_truth": "evals/schemas/findings.schema.json defines the canonical vocabulary. This file is a readable restatement for graders; when the two disagree, the schema wins and this file is the defect.",
+  "squint_gates": [
+    {
+      "id": "S",
+      "name": "shared-responsibility",
+      "required_for_structural_consolidation": true
+    },
+    {
+      "id": "Q",
+      "name": "qualified-contract-compatibility",
+      "required_for_structural_consolidation": true
+    },
+    {
+      "id": "U",
+      "name": "unified-change-pressure",
+      "required_for_structural_consolidation": false
+    },
+    {
+      "id": "I",
+      "name": "intentional-variation-understood",
+      "required_for_structural_consolidation": true
+    },
+    {
+      "id": "N",
+      "name": "narrow-generalization",
+      "required_for_structural_consolidation": true
+    },
+    {
+      "id": "T",
+      "name": "testable-transition",
+      "required_for_structural_consolidation": true
+    }
+  ],
+  "success_metrics": [
+    "reviewer_acceptance_by_artifact_class",
+    "false_unification_rate",
+    "suppression_recurrence_rate",
+    "behavioral_regression_rate",
+    "revert_or_resplit_rate",
+    "missed_propagation_defects",
+    "scan_cost",
+    "byte_stability"
+  ],
+  "unsafe_success_metrics": [
+    "duplicates_removed",
+    "lines_deleted",
+    "candidate_count"
+  ]
+}

@@ -1,0 +1,180 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://local.invalid/abstraction-police/audit-learning-receipt.schema.json",
+  "title": "Immutable non-authorizing audit learning receipt",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schema_version",
+    "kind",
+    "receipt_id",
+    "skill_identity",
+    "skill_hash",
+    "audit_subject_identity",
+    "audit_subject_file_count",
+    "findings_hash",
+    "raw_evidence_hash",
+    "evidence_hash",
+    "execution_hash",
+    "limitations_hash",
+    "limitations_mode",
+    "findings_count",
+    "outcome",
+    "scanner",
+    "producer_id",
+    "inputs",
+    "improvement_triggers",
+    "candidate_authority",
+    "live_skill_modified"
+  ],
+  "properties": {
+    "schema_version": {
+      "const": "1.0"
+    },
+    "kind": {
+      "const": "audit-learning-receipt"
+    },
+    "receipt_id": {
+      "type": "string",
+      "pattern": "^learning-sha256:[0-9a-f]{64}$"
+    },
+    "skill_identity": {
+      "type": "string",
+      "pattern": "^skill-sha256:[0-9a-f]{64}$"
+    },
+    "skill_hash": {
+      "$ref": "#/$defs/sha256"
+    },
+    "audit_subject_identity": {
+      "type": "string",
+      "pattern": "^audit-subject-sha256:[0-9a-f]{64}$"
+    },
+    "audit_subject_file_count": {
+      "type": "integer",
+      "minimum": 0
+    },
+    "findings_hash": {
+      "$ref": "#/$defs/sha256"
+    },
+    "raw_evidence_hash": {
+      "$ref": "#/$defs/sha256"
+    },
+    "evidence_hash": {
+      "$ref": "#/$defs/sha256"
+    },
+    "execution_hash": {
+      "$ref": "#/$defs/sha256"
+    },
+    "limitations_hash": {
+      "$ref": "#/$defs/sha256"
+    },
+    "limitations_mode": {
+      "enum": [
+        "none",
+        "specified"
+      ]
+    },
+    "findings_count": {
+      "type": "integer",
+      "minimum": 0
+    },
+    "outcome": {
+      "enum": [
+        "completed",
+        "incomplete",
+        "failed"
+      ]
+    },
+    "scanner": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "version",
+        "sha256",
+        "options_hash",
+        "stderr_status",
+        "stderr_sha256"
+      ],
+      "properties": {
+        "version": {
+          "type": "string",
+          "minLength": 1
+        },
+        "sha256": {
+          "$ref": "#/$defs/sha256"
+        },
+        "options_hash": {
+          "$ref": "#/$defs/sha256"
+        },
+        "stderr_status": {
+          "enum": [
+            "empty",
+            "captured"
+          ]
+        },
+        "stderr_sha256": {
+          "$ref": "#/$defs/sha256"
+        }
+      }
+    },
+    "producer_id": {
+      "type": "string",
+      "minLength": 1
+    },
+    "inputs": {
+      "type": "array",
+      "minItems": 1,
+      "items": {
+        "$ref": "#/$defs/input"
+      }
+    },
+    "improvement_triggers": {
+      "type": "array",
+      "uniqueItems": true,
+      "items": {
+        "enum": [
+          "evaluation-failure",
+          "explicit-user-disposition"
+        ]
+      }
+    },
+    "candidate_authority": {
+      "const": false
+    },
+    "live_skill_modified": {
+      "const": false
+    }
+  },
+  "$defs": {
+    "sha256": {
+      "type": "string",
+      "pattern": "^[0-9a-f]{64}$"
+    },
+    "input": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "kind",
+        "sha256",
+        "artifact_name"
+      ],
+      "properties": {
+        "kind": {
+          "enum": [
+            "findings",
+            "raw-evidence",
+            "failures",
+            "user-dispositions"
+          ]
+        },
+        "sha256": {
+          "$ref": "#/$defs/sha256"
+        },
+        "artifact_name": {
+          "type": "string",
+          "pattern": "^input-(?:findings|raw-evidence|failures|user-dispositions)-[0-9a-f]{64}\\.json$"
+        }
+      }
+    }
+  }
+}
