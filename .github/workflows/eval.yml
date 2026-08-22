@@ -19,8 +19,8 @@ jobs:
             python: "3.12"
     runs-on: ${{ matrix.os }}
     steps:
-      - uses: actions/checkout@v4
-      - uses: actions/setup-python@v5
+      - uses: actions/checkout@v7
+      - uses: actions/setup-python@v7
         with:
           python-version: ${{ matrix.python }}
       - name: Compile every script
@@ -37,7 +37,7 @@ jobs:
           assert r["status"] == "passed", r
           print("identity", r["identity"]["sha256"], "subject", r["subject"]["sha256"])
           PY
-      - uses: actions/upload-artifact@v4
+      - uses: actions/upload-artifact@v7
         with:
           name: result-${{ matrix.os }}-py${{ matrix.python }}
           path: ${{ runner.temp }}/result-1.json
@@ -47,7 +47,7 @@ jobs:
     needs: frozen-suite
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/download-artifact@v4
+      - uses: actions/download-artifact@v8
         with:
           path: results
       - name: Every result file must be byte-identical
