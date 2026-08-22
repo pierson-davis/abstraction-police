@@ -44,6 +44,10 @@ The frozen identity covers `scripts/`, `evals/cases/`, `evals/expected/`, `evals
 
 4. Record the revision in `build-record.md`: trigger, what changed, what was rejected, and the new identity hash.
 
+## Fixture files git cannot store
+
+No path in this repository may contain a component named `.git`; git refuses to add one, so the file would be silently absent from every clone while still being frozen into `evals/manifest.json`. A fixture that needs a nested-checkout marker stores it as `dot-git`, and `materialize_case` in `scripts/run_eval.py` copies the case to a temporary directory and renames the marker before the scanner runs. The identity check fails closed with `path_not_representable_in_git` if such a path ever reappears.
+
 ## Adding a public case
 
 Add the fixture under `evals/cases/<name>/`, add its intent to `CASE_INTENT` in `scripts/run_eval.py`, generate its golden, then re-freeze. A case without an intent fails both the identity check and `create-new-eval-identity`.

@@ -25,7 +25,7 @@
     "evals/cases/anti_abstraction/styles/patient.css": "7e5868f88ea4f075dc897b07b493d95fe505751a87b4f35daf6edc4bbc40a187",
     "evals/cases/anti_abstraction/vendor/copy-a.py": "f0f254cb67f9896fd1d32d3d95e5c49c2e5a76741ec99d175670995445976337",
     "evals/cases/anti_abstraction/vendor/copy-b.py": "f0f254cb67f9896fd1d32d3d95e5c49c2e5a76741ec99d175670995445976337",
-    "evals/cases/duplicate_subtree/.worktrees/copy1/.git": "5d7131f39fb880d66aa6ae7356040ae02670251d5ede8882791028e07064bf15",
+    "evals/cases/duplicate_subtree/.worktrees/copy1/dot-git": "5d7131f39fb880d66aa6ae7356040ae02670251d5ede8882791028e07064bf15",
     "evals/cases/duplicate_subtree/.worktrees/copy1/src/limiter.ts": "f7c39aed9d6eeaeb78a47ad09e308f04b53f94aaea1352ae98920161b2b70dde",
     "evals/cases/duplicate_subtree/.worktrees/copy1/src/other.ts": "62088ffd3b77c18580f33739e190a529fce981fb0eff430b93966a3bbb435970",
     "evals/cases/duplicate_subtree/src/limiter.ts": "f7c39aed9d6eeaeb78a47ad09e308f04b53f94aaea1352ae98920161b2b70dde",
@@ -61,10 +61,10 @@
     "evals/schemas/run-receipt.schema.json": "d89f4217dd4b8331b26c95167f29395fdaf81f30ec2fcfd23cfa319c4c0d2985",
     "scripts/collect_evidence.py": "3aebd30d8dfb58af2f6bd8af87297f9614e1a7f8a0951b06d86928a58e3edd9c",
     "scripts/improvement.py": "c9384a297bbf233b7dcf8a199ab2ca1291b9dc4f4d30aef44dd867fd7ab3872e",
-    "scripts/run_eval.py": "8b7ce0179961526e5cac2ad516a01e6ae47ef3454ad55ba41c966f44c26d722d",
+    "scripts/run_eval.py": "313422be43ff0f537c25034474d471c2aa73d019ca48f4ca9405b2556a76cbbd",
     "scripts/validate_findings.py": "1f42cc20d3032501e1c14ce60a3004ff5dc62ae07f547b807dabee94d7784fd6"
   },
-  "identity_sha256": "9af3d533542f460bd5ddbd269e0b0616c228c8d2bcfe53cda85dd0c425634c4e",
+  "identity_sha256": "c17b6c0af4c57bfde701af924199c5945e0989e14d0b2c068abea34ef0fc86d7",
   "notice": "NEW-EVAL-IDENTITY: this deliberate operation replaces the frozen evaluator identity. Review every changed input before retaining the new manifest.",
   "public_case_ids": [
     "anti_abstraction",

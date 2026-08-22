@@ -7,8 +7,10 @@ import hashlib
 import json
 import os
 import re
+import shutil
 import subprocess
 import sys
+import tempfile
 from pathlib import Path
 from typing import Any, Dict, List, Optional, Sequence, Tuple
 
@@ -23,6 +25,12 @@ EXPECTED_DIRECTORY = SKILL_ROOT / "evals" / "expected"
 MANIFEST_PATH = SKILL_ROOT / "evals" / "manifest.json"
 COLLECTOR_PATH = SKILL_ROOT / "scripts" / "collect_evidence.py"
 GOVERNANCE_CASE_ID = "governance"
+# A path component named `.git` cannot be committed to a git repository: git
+# refuses to add it, so a fixture that needs a nested-checkout marker would be
+# silently dropped from any clone.  The marker is stored under FIXTURE_MARKER
+# and renamed when the case is materialized for a run.
+FIXTURE_MARKER = "dot-git"
+FIXTURE_MARKER_TARGET = ".git"
 GOVERNANCE_RUNNER_PATH = (
     SKILL_ROOT / "evals" / "governance-cases" / "test_governance.py"
 )
@@ -152,6 +160,15 @@ def required_input_differences() -> List[Dict[str, str]]:
                     "path": relative_to_skill(directory),
                     "reason": "required_input_directory_empty",
                 }
+            )
+    # An identity-bearing file whose path contains a `.git` component cannot be
+    # committed, so it would vanish from every clone while still being frozen
+    # into the manifest.  Refuse to freeze or verify such a tree.
+    for path in current_identity_paths():
+        name = relative_to_skill(path)
+        if any(part == FIXTURE_MARKER_TARGET for part in Path(name).parts):
+            differences.append(
+                {"path": name, "reason": "path_not_representable_in_git"}
             )
     return sorted(differences, key=lambda item: (item["path"], item["reason"]))
 
@@ -374,16 +391,38 @@ def create_new_eval_identity(acknowledged: bool) -> int:
     return 0
 
 
-def run_collector(case_name: str) -> subprocess.CompletedProcess:
-    case_path = CASES_DIRECTORY / case_name
-    return subprocess.run(
-        scrubbed_script_command(COLLECTOR_PATH, str(case_path)),
-        cwd=str(SKILL_ROOT.parent),
-        env=scrubbed_python_environment(),
-        stdout=subprocess.PIPE,
-        stderr=subprocess.PIPE,
-        check=False,
+def materialize_case(case_name: str, destination_parent: Path) -> Path:
+    """Copy one case under `destination_parent`, renaming fixture markers.
+
+    The copy keeps the case's own directory name, and the scanner emits only
+    root-relative paths plus the root's basename, so a case run from a
+    materialized copy produces byte-identical output no matter where the copy
+    lives.  Each run therefore also uses a different absolute path, which makes
+    the two-run byte-identity check a stricter test than it was when both runs
+    shared one path.
+    """
+
+    destination = destination_parent / case_name
+    shutil.copytree(CASES_DIRECTORY / case_name, destination, symlinks=True)
+    markers = sorted(
+        destination.rglob(FIXTURE_MARKER), key=lambda item: item.as_posix()
     )
+    for marker in markers:
+        marker.rename(marker.with_name(FIXTURE_MARKER_TARGET))
+    return destination
+
+
+def run_collector(case_name: str) -> subprocess.CompletedProcess:
+    with tempfile.TemporaryDirectory(prefix="abstraction-police-case-") as raw:
+        case_path = materialize_case(case_name, Path(raw))
+        return subprocess.run(
+            scrubbed_script_command(COLLECTOR_PATH, str(case_path)),
+            cwd=str(SKILL_ROOT.parent),
+            env=scrubbed_python_environment(),
+            stdout=subprocess.PIPE,
+            stderr=subprocess.PIPE,
+            check=False,
+        )
 
 
 def run_governance() -> subprocess.CompletedProcess:

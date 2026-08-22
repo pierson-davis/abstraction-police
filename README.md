@@ -7,7 +7,7 @@ An agent skill that audits a repository for duplicated or latently similar artif
 
 ## Why this exists
 
-Agents love to DRY things that merely look alike. Two retry helpers with the same shape get merged; two validators that happen to share a regex get "centralized"; two design tokens with the same hex become one token, and a month later a product team cannot change one without breaking the other. Resemblance is cheap to detect and expensive to act on.
+Agents are quick to merge code that merely looks alike. Two retry helpers with the same shape get combined; two validators that happen to share a regex get "centralized"; two design tokens with the same hex become one token, and a month later a product team cannot change one without breaking the other. Resemblance is cheap to detect and expensive to act on.
 
 This skill makes the model prove it. Detection is deterministic and candidate-only. Every claim about what the artifacts mean is bounded by the evidence that backs it. Every recommendation passes six gates, and every count in the report comes from a command the reader can re-run. The default output of an audit is a validated JSON document; the validator rejects the document if a single rule is broken, and it rejects the wording "behaviorally equivalent" unless a differential test, contract test, or runtime trace backs it.
 

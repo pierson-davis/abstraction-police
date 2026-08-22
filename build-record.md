@@ -2,12 +2,13 @@
 
 ## Identity
 
-- Version: 1.2.0
+- Version: 1.2.1
 - Built: 2026-08-06; revised 2026-08-07 and 2026-08-21
 - Purpose: find latent reuse opportunities across code and non-code artifacts while rejecting abstractions that share appearance but not responsibility, contract, authority, or change pressure.
 - Public evaluator identity at 1.0.0 freeze: `eb42a9f0b90e3ec2936b68dd4ae2586f6e46e9433924f4b01e71ea300abaca07`
 - Public evaluator identity at 1.1.0 freeze: `69630678a0414c8494812d0864abac0e974b6fed3f27a54b7de0b52e50dd8641`
-- Public evaluator identity at 1.2.0 freeze: `9af3d533542f460bd5ddbd269e0b0616c228c8d2bcfe53cda85dd0c425634c4e`
+- Public evaluator identity at 1.2.0 freeze: `9af3d533542f460bd5ddbd269e0b0616c228c8d2bcfe53cda85dd0c425634c4e` (local only; the 1.2.0 tag cannot be evaluated from a clone, see revision 1.2.1)
+- Public evaluator identity at 1.2.1 freeze: `c17b6c0af4c57bfde701af924199c5945e0989e14d0b2c068abea34ef0fc86d7`
 
 ## Research basis
 
@@ -127,3 +128,27 @@ A read-only adversarial audit of this skill by an external model (run through Op
 - create-new-eval-identity preflight: 5/5 passed.
 - Full suite: two byte-identical runs on Python 3.9.6 (Unicode database 13.0.0); the full result bytes, including identity and case statuses, were identical on Python 3.11 (Unicode 14.0.0) and Python 3.12 (Unicode 15.0.0); CI repeats the suite on Linux and macOS and compares every result file.
 - references/finding-example.md worked example: validates with --allow-missing-paths (`valid: 1 finding(s)`).
+
+## Revision 1.2.1 (2026-08-22)
+
+### Trigger and authorization
+
+Publication defect found by verifying a fresh clone of the pushed 1.2.0 tag, and independently by the first CI run, which failed on both jobs. Pierson Davis authorized the publication and this fix on 2026-08-22.
+
+The defect: the `duplicate_subtree` fixture's nested-checkout marker was a file literally named `.git`. Git refuses to add a path whose component is `.git`, so `git add -A` dropped it without an error anyone read, the 1.2.0 commit shipped 70 of the 71 tree files, and every clone failed `verify_frozen_identity` with `missing_file`. The local tree passed because the file was present locally. Two controls that should have caught it did not: the identity manifest froze a path that cannot be committed, and the subject attestation skipped that same path, because `tree_identity` treats any path component named `.git` as an ignored directory. The suite was never run from a clone before publishing. That gap is the finding, not the fixture.
+
+### What changed
+
+- evals/cases/duplicate_subtree/.worktrees/copy1: the marker is stored as `dot-git` and is now a normal, committable file.
+- scripts/run_eval.py: `materialize_case` copies each discovery case to a temporary directory and renames `dot-git` to `.git` before the scanner runs. The scanner emits only root-relative paths and the root's basename, so output is unchanged; all four discovery goldens are byte-identical to their 1.2.0 bytes. A side effect strengthens the suite: the two runs of a case now use different absolute paths, so the byte-identity check would catch an absolute path leaking into scanner output, which it could not when both runs shared one path.
+- scripts/run_eval.py: `required_input_differences` fails closed with `path_not_representable_in_git` for any identity-bearing path containing a `.git` component, so a manifest that cannot survive a clone can no longer be frozen.
+- Subject attestation now covers 71 files rather than 70: with the marker renamed, `tree_identity` no longer skips it.
+- CONTRIBUTING.md documents the marker convention; README drops the jargon verb "DRY".
+
+### Verification at re-freeze
+
+- Public cases: 5; frozen evaluator inputs: 54; governance regressions: 14; subject files: 71.
+- Discovery goldens: byte-identical to 1.2.0 (the fix changes staging, not output).
+- duplicate_subtree still prunes `.worktrees/copy1`, scans 2 primary-tree artifacts, and reports no candidate from a pruned path.
+- Two byte-identical runs on Python 3.9.6; full result bytes identical on Python 3.11 and 3.12.
+- Verified from a fresh `git clone` of the public repository, not only from the working tree. That check is now the release gate.
