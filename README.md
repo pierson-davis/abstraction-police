@@ -9,7 +9,7 @@ An agent skill that audits a repository for duplicated or latently similar artif
 
 Agents are quick to merge code that merely looks alike. Two retry helpers with the same shape get combined; two validators that happen to share a regex get "centralized"; two design tokens with the same hex become one token, and a month later a product team cannot change one without breaking the other. Resemblance is cheap to detect and expensive to act on.
 
-This skill makes the model prove it. Detection is deterministic and candidate-only. Every claim about what the artifacts mean is bounded by the evidence that backs it. Every recommendation passes six gates, and every count in the report comes from a command the reader can re-run. The default output of an audit is a validated JSON document; the validator rejects the document if a single rule is broken, and it rejects the wording "behaviorally equivalent" unless a differential test, contract test, or runtime trace backs it.
+The name is Boris Cherny's: at YC Startup School in 2026 he described an "abstraction police" routine that finds near-duplicate abstractions and unifies them (see Acknowledgments). This skill makes the model prove it before it does. Detection is deterministic and candidate-only. Every claim about what the artifacts mean is bounded by the evidence that backs it. Every recommendation passes six gates, and every count in the report comes from a command the reader can re-run. The default output of an audit is a validated JSON document; the validator rejects the document if a single rule is broken, and it rejects the wording "behaviorally equivalent" unless a differential test, contract test, or runtime trace backs it.
 
 ## What an audit produces
 
@@ -110,11 +110,13 @@ See `CONTRIBUTING.md`. The short version: the suite must pass before and after, 
 
 ## Acknowledgments
 
-The instinct behind this skill is not original to it. Boris Cherny, talking about Claude Code with Diana Hu at Y Combinator's Startup School in July 2026, said the team "deleted 80% of the system prompt" when Opus 5 shipped. Most of what they removed had been correcting for behavior the model no longer got wrong. His framing is that a harness is always losing weight, not only gaining it.
+The name comes from Boris Cherny. Talking about Claude Code with Diana Hu at Y Combinator's Startup School in July 2026, he described a routine Anthropic runs across its own codebases and called it, in as many words, the "abstraction police":
 
-An abstraction is scaffolding too. It gets added when two things look alike, and it stays long after anyone last checked whether they still are. This skill points the same instinct at code: prove the shared concept, or leave the copies alone.
+> often in a big code base, there's the same abstraction and it appears multiple times. And if you squint, it actually maybe should just be the same abstraction, but over time, for whatever reason, you rebuilt it multiple ways in different parts of the code base. So Claude goes out every day across all our code bases. It finds these nearly duplicated abstractions and unifies them.
 
-Source: [Boris Cherny: Building Claude Code](https://www.ycombinator.com/library/UN-boris-cherny-building-claude-code), Y Combinator Startup School, July 2026.
+Two things in that sentence became the skill. The name is his. And "if you squint" is why the six adjudication gates spell SQUINT: the judgment call in his description is exactly the one this skill refuses to make on vibes. Where he runs the routine to unify at scale, this version is built to be conservative, to demand cited evidence for every "yes, these are one thing," and to leave copies alone when the evidence is only skin deep.
+
+Source: [Boris Cherny: Building Claude Code](https://www.ycombinator.com/library/UN-boris-cherny-building-claude-code), Y Combinator Startup School, interviewed by Diana Hu, July 2026.
 
 ## License
 
