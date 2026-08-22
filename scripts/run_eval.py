@@ -14,7 +14,7 @@ import tempfile
 from pathlib import Path
 from typing import Any, Dict, List, Optional, Sequence, Tuple
 
-from improvement import tree_identity
+from improvement import IGNORED_TREE_DIRS, IGNORED_TREE_FILES, tree_identity
 
 
 SCHEMA_VERSION = "1.0"
@@ -161,23 +161,45 @@ def required_input_differences() -> List[Dict[str, str]]:
                     "reason": "required_input_directory_empty",
                 }
             )
-    # An identity-bearing file whose path contains a `.git` component cannot be
-    # committed, so it would vanish from every clone while still being frozen
-    # into the manifest.  Refuse to freeze or verify such a tree.
-    for path in current_identity_paths():
-        name = relative_to_skill(path)
-        if any(part == FIXTURE_MARKER_TARGET for part in Path(name).parts):
-            differences.append(
-                {"path": name, "reason": "path_not_representable_in_git"}
-            )
+    # A fixture path containing a `.git` component cannot be committed, so it
+    # would vanish from every clone.  `identity_bearing` already excludes such
+    # paths, so scan the raw tree instead of the filtered identity set, and
+    # fail closed rather than freezing a manifest a clone cannot reproduce.
+    unrepresentable = set()
+    for directory in REQUIRED_IDENTITY_DIRECTORIES:
+        if not directory.is_dir():
+            continue
+        for path in directory.rglob(FIXTURE_MARKER_TARGET):
+            unrepresentable.add(path.relative_to(SKILL_ROOT).as_posix())
+    for name in sorted(unrepresentable):
+        differences.append({"path": name, "reason": "path_not_representable_in_git"})
     return sorted(differences, key=lambda item: (item["path"], item["reason"]))
+
+
+def identity_bearing(relative: Path) -> bool:
+    """True when a skill-root-relative path counts toward the evaluator identity.
+
+    Byte-compiled caches and operating-system cruft are not evaluator inputs:
+    running `compileall`, or opening a fixture directory in Finder, must not
+    change what the suite considers frozen.  The ignore sets are imported from
+    `improvement` so this predicate and the subject attestation in
+    `tree_identity` can never disagree about what belongs to the skill.
+    """
+
+    if any(part in IGNORED_TREE_DIRS for part in relative.parts):
+        return False
+    return relative.name not in IGNORED_TREE_FILES
 
 
 def current_identity_paths() -> List[Path]:
     paths = [path for path in REQUIRED_IDENTITY_FILES if path.is_file()]
     for directory in REQUIRED_IDENTITY_DIRECTORIES:
         if directory.is_dir():
-            paths.extend(path for path in directory.rglob("*") if path.is_file())
+            paths.extend(
+                path
+                for path in directory.rglob("*")
+                if path.is_file() and identity_bearing(path.relative_to(SKILL_ROOT))
+            )
     unique_paths = {path.resolve(): path for path in paths}
     return sorted(unique_paths.values(), key=relative_to_skill)
 

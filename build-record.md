@@ -2,13 +2,14 @@
 
 ## Identity
 
-- Version: 1.2.1
+- Version: 1.2.2
 - Built: 2026-08-06; revised 2026-08-07 and 2026-08-21
 - Purpose: find latent reuse opportunities across code and non-code artifacts while rejecting abstractions that share appearance but not responsibility, contract, authority, or change pressure.
 - Public evaluator identity at 1.0.0 freeze: `eb42a9f0b90e3ec2936b68dd4ae2586f6e46e9433924f4b01e71ea300abaca07`
 - Public evaluator identity at 1.1.0 freeze: `69630678a0414c8494812d0864abac0e974b6fed3f27a54b7de0b52e50dd8641`
 - Public evaluator identity at 1.2.0 freeze: `9af3d533542f460bd5ddbd269e0b0616c228c8d2bcfe53cda85dd0c425634c4e` (local only; the 1.2.0 tag cannot be evaluated from a clone, see revision 1.2.1)
 - Public evaluator identity at 1.2.1 freeze: `c17b6c0af4c57bfde701af924199c5945e0989e14d0b2c068abea34ef0fc86d7`
+- Public evaluator identity at 1.2.2 freeze: `bdd9268a5633be2e37ae4198d60c1e64dad9c1cb0c6d978b721cb99bb34853da`
 
 ## Research basis
 
@@ -152,3 +153,24 @@ The defect: the `duplicate_subtree` fixture's nested-checkout marker was a file 
 - duplicate_subtree still prunes `.worktrees/copy1`, scans 2 primary-tree artifacts, and reports no candidate from a pruned path.
 - Two byte-identical runs on Python 3.9.6; full result bytes identical on Python 3.11 and 3.12.
 - Verified from a fresh `git clone` of the public repository, not only from the working tree. That check is now the release gate.
+
+## Revision 1.2.2 (2026-08-22)
+
+### Trigger and authorization
+
+The first continuous-integration run of 1.2.1 failed on all three jobs with `NEW-EVAL-IDENTITY: frozen evaluator inputs changed`, while a fresh clone passed on the author's machine. Pierson Davis authorized the fix on 2026-08-22 as part of the same publication.
+
+The defect: `current_identity_paths` swept `evals/cases`, `evals/expected`, `evals/governance-cases`, and `evals/schemas` with an unfiltered `rglob("*")`, so any byte-compiled cache or operating-system file inside them counted as an evaluator input. The workflow's `compileall` step writes `__pycache__` directories into `scripts` and `evals/governance-cases`, which the identity check then reported as `unfrozen_file`. Two facts hid this locally: the macOS system Python writes bytecode to a central `sys.pycache_prefix` rather than to `__pycache__` beside the source, and the author had been deleting `__pycache__` after every local run, which papered over the failure rather than exposing it. The subject attestation was already immune, because `tree_identity` ignores those names; the identity surface and the subject surface simply disagreed about what belongs to the skill.
+
+### What changed
+
+- scripts/run_eval.py: `identity_bearing` decides whether a skill-root-relative path counts toward the evaluator identity, importing `IGNORED_TREE_DIRS` and `IGNORED_TREE_FILES` from `improvement` so the identity surface and the subject attestation cannot drift apart. `current_identity_paths` filters through it.
+- scripts/run_eval.py: the `path_not_representable_in_git` guard added in 1.2.1 now scans the raw tree with `rglob(".git")` rather than the filtered identity set, which `identity_bearing` would otherwise have made unreachable.
+- evals/governance-cases/test_governance.py: regression `evaluator-identity-ignores-bytecode-and-os-cruft` pins the predicate against eight paths and asserts the shared ignore sets still cover `.git`, `__pycache__`, and `.DS_Store`. Fifteen governance regressions.
+
+### Verification at re-freeze
+
+- Public cases: 5; frozen evaluator inputs: 54; governance regressions: 15; subject files: 71.
+- Discovery goldens: unchanged; only the governance golden changed, by exactly the one new check name.
+- With `__pycache__` directories and a `.DS_Store` planted inside the identity directories, the suite passes and its result bytes are identical to a run with none of them present.
+- Two byte-identical runs, a fresh public clone, and a green continuous-integration run across Linux and macOS on Python 3.9 and 3.12 are now the release gate; the tag is created only after all three.

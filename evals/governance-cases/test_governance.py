@@ -18,6 +18,8 @@ sys.path.insert(0, str(SCRIPTS))
 
 import collect_evidence  # noqa: E402
 import improvement  # noqa: E402
+import run_eval  # noqa: E402
+from improvement import IGNORED_TREE_DIRS, IGNORED_TREE_FILES  # noqa: E402
 from validate_findings import FindingsValidationError, validate_document  # noqa: E402
 
 
@@ -933,6 +935,26 @@ def run_checks() -> List[str]:
         if evidence["scan"]["artifact_count"] != 2:
             raise AssertionError("scanner followed a symbolic link")
         checks.append("scanner-discloses-skipped-symlinks")
+
+        identity_bearing_cases = {
+            "SKILL.md": True,
+            "evals/cases/duplicate_subtree/.worktrees/copy1/dot-git": True,
+            "evals/governance-cases/test_governance.py": True,
+            "scripts/run_eval.py": True,
+            "evals/cases/example/.DS_Store": False,
+            "evals/cases/example/.git": False,
+            "evals/governance-cases/__pycache__/test_governance.cpython-312.pyc": False,
+            "scripts/__pycache__/run_eval.cpython-39.pyc": False,
+        }
+        for name, expected in sorted(identity_bearing_cases.items()):
+            actual = run_eval.identity_bearing(Path(name))
+            if actual is not expected:
+                raise AssertionError(
+                    f"identity_bearing({name!r}) returned {actual}, expected {expected}"
+                )
+        if not IGNORED_TREE_DIRS >= {".git", "__pycache__"} or ".DS_Store" not in IGNORED_TREE_FILES:
+            raise AssertionError("the shared ignore sets no longer cover bytecode and OS cruft")
+        checks.append("evaluator-identity-ignores-bytecode-and-os-cruft")
 
     return sorted(checks)
 
