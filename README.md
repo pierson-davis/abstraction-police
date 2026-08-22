@@ -108,6 +108,14 @@ build-record.md                 revision history with recorded rejections
 
 See `CONTRIBUTING.md`. The short version: the suite must pass before and after, two runs must be byte-identical, goldens are regenerated only when the scanner's output is meant to change, and validator rules are appended after `main()` so the line citations in `references/validator-rules.md` stay true.
 
+## Acknowledgments
+
+The instinct behind this skill is not original to it. Boris Cherny, talking about Claude Code with Diana Hu at Y Combinator's Startup School in July 2026, said the team "deleted 80% of the system prompt" when Opus 5 shipped. Most of what they removed had been correcting for behavior the model no longer got wrong. His framing is that a harness is always losing weight, not only gaining it.
+
+An abstraction is scaffolding too. It gets added when two things look alike, and it stays long after anyone last checked whether they still are. This skill points the same instinct at code: prove the shared concept, or leave the copies alone.
+
+Source: [Boris Cherny: Building Claude Code](https://www.ycombinator.com/library/UN-boris-cherny-building-claude-code), Y Combinator Startup School, July 2026.
+
 ## License
 
 MIT. See `LICENSE`.

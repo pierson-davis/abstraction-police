@@ -1,8 +1,19 @@
 name: eval
 
+# Tag pushes point at commits main has already built, so an unfiltered trigger
+# runs identical bytes twice. Branch pushes and pull requests cover every
+# change exactly once.
 on:
   push:
+    branches: ["**"]
   pull_request:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: eval-${{ github.ref }}
+  cancel-in-progress: true
 
 jobs:
   frozen-suite:
